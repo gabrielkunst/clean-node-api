@@ -1,4 +1,4 @@
-import { InvalidParamError, MissingParamError } from '../errors'
+import { InvalidParamError, MissingParamError, ServerError } from '../errors'
 import { type EmailValidator, type HttpRequest } from '../protocols'
 import { SignUpController } from './signup'
 
@@ -8,14 +8,28 @@ interface SutTypes {
 
 }
 
-const createSut = (): SutTypes => {
+const createEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
     isValid (email: string): boolean {
       return true
     }
   }
 
-  const emailValidatorStub = new EmailValidatorStub()
+  return new EmailValidatorStub()
+}
+
+const createEmailValidatorWithError = (): EmailValidator => {
+  class EmailValidatorStub implements EmailValidator {
+    isValid (email: string): boolean {
+      throw new Error()
+    }
+  }
+
+  return new EmailValidatorStub()
+}
+
+const createSut = (): SutTypes => {
+  const emailValidatorStub = createEmailValidator()
   const sut = new SignUpController(emailValidatorStub)
 
   return {
@@ -116,5 +130,26 @@ describe('SignUp Controller', () => {
 
     sut.handle(httpRequest)
     expect(isValidSpy).toHaveBeenLastCalledWith('any_email@mail.com')
+  })
+  test('Should return 500 if EmailValidator throws an error', () => {
+    const emailValidator = createEmailValidatorWithError()
+    const sut = new SignUpController(emailValidator)
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    }
+
+    const response = sut.handle(httpRequest)
+
+    if (!response) {
+      throw new Error('Response is not defined')
+    }
+
+    expect(response.statusCode).toBe(500)
+    expect(response.body).toEqual(new ServerError())
   })
 })
