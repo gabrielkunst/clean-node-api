@@ -33,7 +33,7 @@ const createEmailValidator = (): EmailValidator => {
 
 interface SutTypes {
   sut: SignUpController
-  emailValidator: EmailValidator
+  emailValidatorStub: EmailValidator
   addAccountStub: AddAccount
 }
 
@@ -43,7 +43,7 @@ const createSut = (): SutTypes => {
   const sut = new SignUpController(emailValidatorStub, addAccountStub)
 
   return {
-    sut, emailValidator: emailValidatorStub, addAccountStub
+    sut, emailValidatorStub, addAccountStub
   }
 }
 
@@ -145,8 +145,8 @@ describe('SignUp Controller', () => {
     expect(response.body).toEqual(new InvalidParamError('passwordConfirmation'))
   })
   test('Should return error if email is not valid', () => {
-    const { sut, emailValidator } = createSut()
-    jest.spyOn(emailValidator, 'isValid').mockReturnValueOnce(false)
+    const { sut, emailValidatorStub } = createSut()
+    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
     const httpRequest: HttpRequest = {
       body: {
         name: 'any_name',
@@ -166,8 +166,8 @@ describe('SignUp Controller', () => {
     expect(response.body).toEqual(new InvalidParamError('email'))
   })
   test('Should call EmailValidator with correct email', () => {
-    const { sut, emailValidator } = createSut()
-    const isValidSpy = jest.spyOn(emailValidator, 'isValid')
+    const { sut, emailValidatorStub } = createSut()
+    const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
     const httpRequest: HttpRequest = {
       body: {
         name: 'any_name',
@@ -181,8 +181,8 @@ describe('SignUp Controller', () => {
     expect(isValidSpy).toHaveBeenLastCalledWith('any_email@mail.com')
   })
   test('Should return 500 if EmailValidator throws an error', () => {
-    const { sut, emailValidator } = createSut()
-    jest.spyOn(emailValidator, 'isValid').mockImplementationOnce(() => {
+    const { sut, emailValidatorStub } = createSut()
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
       throw new Error()
     })
     const httpRequest: HttpRequest = {
