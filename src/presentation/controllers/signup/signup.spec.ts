@@ -8,7 +8,7 @@ const createAddAccount = (): AddAccount => {
       const fakeAccount = {
         id: 'valid_id',
         name: 'valid_name',
-        email: 'valid_email',
+        email: 'valid_email@mail.com',
         password: 'valid_password'
       }
 
@@ -218,6 +218,54 @@ describe('SignUp Controller', () => {
       name: 'any_name',
       email: 'any_email@mail.com',
       password: 'any_password'
+    })
+  })
+  test('Should return 500 if AddAccount throws an error', () => {
+    const { sut, addAccountStub } = createSut()
+    jest.spyOn(addAccountStub, 'add').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    }
+
+    const response = sut.handle(httpRequest)
+
+    if (!response) {
+      throw new Error('Response is not defined')
+    }
+
+    expect(response.statusCode).toBe(500)
+    expect(response.body).toEqual(new ServerError())
+  })
+  test('Should return 201 if a new account is created', () => {
+    const { sut } = createSut()
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'valid_name',
+        email: 'valid_email@mail.com',
+        password: 'valid_password',
+        passwordConfirmation: 'valid_password'
+      }
+    }
+
+    const response = sut.handle(httpRequest)
+
+    if (!response) {
+      throw new Error('Response is not defined')
+    }
+
+    expect(response.statusCode).toBe(201)
+    expect(response.body).toEqual({
+      id: 'valid_id',
+      name: 'valid_name',
+      email: 'valid_email@mail.com',
+      password: 'valid_password'
     })
   })
 })
