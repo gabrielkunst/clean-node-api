@@ -9,7 +9,7 @@
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "npm jest -- --watch -c jest-unit-config.js",
     "test:integration": "npm jest -- --watch -c jest-integration-config.js",
-    "test:staged": "npm test -- --findRelatedTests",
+    "test:staged": "npm test --",
     "test:ci": "npm test -- --coverage",
     "prepare": "husky"
   },

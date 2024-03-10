@@ -5,7 +5,9 @@ const config: Config = {
     '<rootDir>/src'
   ],
   collectCoverageFrom: [
-    '<rootDir>/src/**/*.ts'
+    '<rootDir>/src/**/*.ts',
+    '!<rootDir>/src/**/index.ts',
+    '!<rootDir>/src/**/*-protocols.ts'
   ],
   collectCoverage: true,
   coverageDirectory: 'coverage',
@@ -16,6 +18,7 @@ const config: Config = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1'
   }
+
 }
 
 export default config
