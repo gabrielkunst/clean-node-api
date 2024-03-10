@@ -104,6 +104,26 @@ describe('SignUp Controller', () => {
     expect(response.statusCode).toBe(400)
     expect(response.body).toEqual(new MissingParamError('passwordConfirmation'))
   })
+  test('Should return error if password confirmation fails', () => {
+    const { sut } = createSut()
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'invalid_password'
+      }
+    }
+
+    const response = sut.handle(httpRequest)
+
+    if (!response) {
+      throw new Error('Response is not defined')
+    }
+
+    expect(response.statusCode).toBe(400)
+    expect(response.body).toEqual(new InvalidParamError('passwordConfirmation'))
+  })
   test('Should return error if email is not valid', () => {
     const { sut, emailValidator } = createSut()
     jest.spyOn(emailValidator, 'isValid').mockReturnValueOnce(false)
