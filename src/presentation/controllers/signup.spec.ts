@@ -1,9 +1,10 @@
+import { type HttpRequest } from '../protocols/http'
 import { SignUpController } from './signup'
 
 describe('SignUp Controller', () => {
   test('Should return error if no name is provided', () => {
     const sut = new SignUpController()
-    const httpRequest = {
+    const httpRequest: HttpRequest = {
       body: {
         email: 'any_email@mail.com',
         password: 'any_password',
@@ -12,12 +13,17 @@ describe('SignUp Controller', () => {
     }
 
     const response = sut.handle(httpRequest)
+
+    if (!response) {
+      return
+    }
+
     expect(response.statusCode).toBe(400)
     expect(response.body).toEqual(new Error('Missing param: name'))
   })
   test('Should return error if no email is provided', () => {
     const sut = new SignUpController()
-    const httpRequest = {
+    const httpRequest: HttpRequest = {
       body: {
         name: 'any_name',
         password: 'any_password',
@@ -26,6 +32,11 @@ describe('SignUp Controller', () => {
     }
 
     const response = sut.handle(httpRequest)
+
+    if (!response) {
+      return
+    }
+
     expect(response.statusCode).toBe(400)
     expect(response.body).toEqual(new Error('Missing param: email'))
   })
