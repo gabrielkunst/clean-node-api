@@ -16,7 +16,7 @@ describe('SignUp Controller', () => {
     const response = sut.handle(httpRequest)
 
     if (!response) {
-      return
+      throw new Error('Response is not defined')
     }
 
     expect(response.statusCode).toBe(400)
@@ -35,7 +35,7 @@ describe('SignUp Controller', () => {
     const response = sut.handle(httpRequest)
 
     if (!response) {
-      return
+      throw new Error('Response is not defined')
     }
 
     expect(response.statusCode).toBe(400)
