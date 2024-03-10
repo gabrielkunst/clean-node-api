@@ -60,4 +60,23 @@ describe('SignUp Controller', () => {
     expect(response.statusCode).toBe(400)
     expect(response.body).toEqual(new MissingParamError('password'))
   })
+  test('Should return error if no passwordConfirmation is provided', () => {
+    const sut = new SignUpController()
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password'
+      }
+    }
+
+    const response = sut.handle(httpRequest)
+
+    if (!response) {
+      throw new Error('Response is not defined')
+    }
+
+    expect(response.statusCode).toBe(400)
+    expect(response.body).toEqual(new MissingParamError('passwordConfirmation'))
+  })
 })
