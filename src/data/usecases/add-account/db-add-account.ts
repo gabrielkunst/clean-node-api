@@ -1,4 +1,4 @@
-import { type AddAccountRepository } from '@/data/protocols/add-account-reposltory'
+import { type AddAccountRepository } from '@/data/protocols/add-account-repository'
 import { type Encrypter } from '@/data/protocols/encrypter'
 import { type AccountModel } from '@/domain/models/account'
 import {

@@ -1,7 +1,7 @@
 import { type Encrypter } from '@/data/protocols/encrypter'
 import { DbAddAccount } from './db-add-account'
 import { type AddAccountModel } from '@/domain/usecases/add-account'
-import { type AddAccountRepository } from '@/data/protocols/add-account-reposltory'
+import { type AddAccountRepository } from '@/data/protocols/add-account-repository'
 import { type AccountModel } from '@/domain/models/account'
 
 const createAddAccountRepository = (): AddAccountRepository => {
