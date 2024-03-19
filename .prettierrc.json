@@ -2,7 +2,7 @@
   "semi": false,
   "singleQuote": true,
   "parser": "typescript",
-  "trailingComma": "es5",
+  "trailingComma": "none",
   "arrowParens": "avoid",
   "endOfLine": "lf"
 }
